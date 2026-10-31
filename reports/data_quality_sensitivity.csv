@@ -1,0 +1,4 @@
+data quality,score_noise,best model,macro F1,P1 miss %,P1 recall %
+rich context captured,0.25,Logistic Regression (TF-IDF),0.792,0.0,86.8
+moderate (demo default),0.45,Logistic Regression (TF-IDF),0.774,0.0,89.9
+poor context captured,0.8,Logistic Regression (TF-IDF),0.724,0.7,82.9

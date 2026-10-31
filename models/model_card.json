@@ -1,0 +1,36 @@
+{
+  "model_name": "ensemble_lr_lgbm",
+  "model_label": "Ensemble (LogReg + LightGBM)",
+  "version": "0.1.0",
+  "trained_at": "2026-10-29T15:31:29.922291+00:00",
+  "classes": [
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+  ],
+  "policy": {
+    "critical_idx": 0,
+    "high_idx": 1,
+    "t_critical": 1.01,
+    "t_high": 1.01
+  },
+  "train_rows": 7200,
+  "test_metrics": {
+    "latency_ms_p50": 64.33865000144579,
+    "latency_ms_p95": 68.1614400295075,
+    "final_macro_f1": 0.7870542430475216,
+    "final_accuracy": 0.81875,
+    "final_critical_miss": 0.0,
+    "final_critical_miss_ci_high": 0.02530004952529478,
+    "final_critical_recall": 0.8175675675675675,
+    "final_critical_precision": 0.7333333333333333,
+    "ordinal_mae": 0.18458333333333332,
+    "f1_P1": 0.7731629392971247,
+    "f1_P2": 0.7115384615384616,
+    "f1_P3": 0.7654639175257731,
+    "f1_P4": 0.8980516538287268,
+    "auto_assign_rate": 0.8604166666666667,
+    "auto_accuracy": 0.8581113801452784
+  }
+}

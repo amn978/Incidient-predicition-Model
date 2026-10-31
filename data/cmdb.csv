@@ -1,0 +1,15 @@
+affected_service,service_tier,customer_facing,owner_team
+checkout-service,1,1,Platform-OnCall
+payments-api,1,1,Platform-OnCall
+auth-service,1,1,Platform-OnCall
+customer-portal,1,1,Platform-OnCall
+order-management,2,1,App-Support
+search-service,2,1,App-Support
+notification-service,2,1,App-Support
+inventory-sync,2,0,App-Support
+data-warehouse,2,0,App-Support
+reporting-dashboard,3,0,IT-Helpdesk
+internal-wiki,3,0,IT-Helpdesk
+hr-portal,3,0,IT-Helpdesk
+ml-inference-gateway,1,1,Platform-OnCall
+feature-store,2,0,App-Support

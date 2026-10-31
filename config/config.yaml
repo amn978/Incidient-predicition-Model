@@ -1,0 +1,79 @@
+# ---------------------------------------------------------------------------
+# Central configuration. Change behaviour here, not in code.
+# Paths are relative to the project root.
+# ---------------------------------------------------------------------------
+project:
+  name: incident-severity-ml
+  random_state: 42
+
+paths:
+  data_dir: data
+  raw_tickets: data/tickets.csv
+  cmdb: data/cmdb.csv
+  processed_dir: data/processed
+  models_dir: models
+  reports_dir: reports
+  feedback_db: data/feedback.db
+
+data:
+  n_tickets: 12000
+  start_date: "2025-01-01"
+  end_date: "2026-06-30"
+  score_noise: 0.45            # unobserved business context (higher = harder problem; try 0.8 for 'hard mode')
+  label_noise: 0.06            # share of labels humans got "wrong" (simulates inconsistent triage)
+  target_col: severity
+  time_col: created_at
+  # Fields that only exist AFTER triage/resolution. They are removed before training
+  # so the model can never "cheat" with information unavailable at ticket creation.
+  leakage_columns: [resolution_minutes, closed_at, assignment_group, close_notes]
+
+split:                          # time-based split: oldest -> train, newest -> test
+  train_frac: 0.60
+  val_frac: 0.20
+
+classes: [P1, P2, P3, P4]       # ordered, most severe first
+
+success_metrics:
+  macro_f1_min: 0.80
+  critical_miss_rate_max: 0.02  # P1 predicted as a "low" class
+  triage_seconds_max: 10
+  critical_class: P1
+  low_classes: [P3, P4]
+
+thresholds:
+  enabled: true
+  safety_margin: 0.75           # tune on validation to <= 75% of the target, leaving headroom for test noise
+
+routing:
+  review_confidence: 0.60       # below this confidence -> human triage queue
+  manual_triage_minutes: 5      # ASSUMPTION for the demo. Replace with your measured average.
+
+models:
+  include_embeddings: false     # needs `pip install sentence-transformers` + internet once
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+
+# Business rules that sit OUTSIDE the model (editable without retraining).
+# They can only RAISE severity (never lower it).
+rules:
+  enabled: true
+  items:
+    - name: ransomware
+      pattern: "ransomware|ransom note|encrypted files"
+      min_severity: P1
+      environments: [prod, staging, dev]
+    - name: leaked_credentials
+      pattern: "leaked access key|credentials exposed|key compromised|found in public github"
+      min_severity: P1
+      environments: [prod]
+    - name: root_account_activity
+      pattern: "root account login|root user sign-in|root account used"
+      min_severity: P1
+      environments: [prod]
+    - name: total_outage
+      pattern: "all targets unhealthy|zero healthy hosts|region outage|regional service disruption|primary database is down|primary rds|production database crashed"
+      min_severity: P1
+      environments: [prod]
+    - name: data_destruction
+      pattern: "table dropped|destroyed production resources|deleted .* infrastructure"
+      min_severity: P1
+      environments: [prod]
